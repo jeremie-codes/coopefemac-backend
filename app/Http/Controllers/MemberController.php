@@ -317,8 +317,8 @@ class MemberController extends Controller
             $newImagePath = $this->handleImageUpload($request);
             if ($newImagePath) {
                 // Supprimer l'ancienne image si elle existe
-                if ($member->face_path && file_exists(public_path($member->face_path))) {
-                    unlink(public_path($member->face_path));
+                if ($member->face_path && file_exists(public_path('storage/' . $member->face_path))) {
+                    unlink(public_path('storage/' . $member->face_path));
                 }
                 $data['face_path'] = $newImagePath;
             }
@@ -353,8 +353,8 @@ class MemberController extends Controller
             }
 
             // Supprimer l'image si elle existe
-            if ($member->face_path && file_exists(public_path($member->face_path))) {
-                unlink(public_path($member->face_path));
+            if ($member->face_path && file_exists(public_path('storage/' . $member->face_path))) {
+                unlink(public_path('storage/' . $member->face_path));
             }
 
             $site = $member->site;
@@ -807,8 +807,8 @@ class MemberController extends Controller
             // Gérer l'image base64
             if ($request->has('face_base64') && !empty($request->face_base64)) {
                 // Supprimer l'ancienne image si elle existe
-                if ($member->face_path && file_exists(public_path($member->face_path))) {
-                    unlink(public_path($member->face_path));
+                if ($member->face_path && file_exists(public_path('storage/' . $member->face_path))) {
+                    unlink(public_path('storage/' . $member->face_path));
                 }
 
                 $data['face_path'] = $this->saveBase64Image($request->face_base64);
