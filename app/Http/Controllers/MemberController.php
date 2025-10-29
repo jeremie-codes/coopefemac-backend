@@ -192,9 +192,9 @@ class MemberController extends Controller
 
             $base64Image = null;
 
-            if ($member->face_path && file_exists(public_path($member->face_path))) {
-                $fileContent = file_get_contents(public_path($member->face_path));
-                $mimeType = mime_content_type(public_path($member->face_path));
+            if ($member->face_path && file_exists(public_path('storage/' . $member->face_path))) {
+                $fileContent = file_get_contents(public_path('storage/' . $member->face_path));
+                $mimeType = mime_content_type(public_path('storage/' . $member->face_path));
                 $base64Image = 'data:' . $mimeType . ';base64,' . base64_encode($fileContent);
             }
 
@@ -317,8 +317,8 @@ class MemberController extends Controller
             $newImagePath = $this->handleImageUpload($request);
             if ($newImagePath) {
                 // Supprimer l'ancienne image si elle existe
-                if ($member->face_path && file_exists(public_path($member->face_path))) {
-                    unlink(public_path($member->face_path));
+                if ($member->face_path && file_exists(public_path('storage/' . $member->face_path))) {
+                    unlink(public_path('storage/' . $member->face_path));
                 }
                 $data['face_path'] = $newImagePath;
             }
@@ -353,8 +353,8 @@ class MemberController extends Controller
             }
 
             // Supprimer l'image si elle existe
-            if ($member->face_path && file_exists(public_path($member->face_path))) {
-                unlink(public_path($member->face_path));
+            if ($member->face_path && file_exists(public_path('storage/' . $member->face_path))) {
+                unlink(public_path('storage/' . $member->face_path));
             }
 
             $site = $member->site;
@@ -651,7 +651,7 @@ class MemberController extends Controller
             file_put_contents($filePath, $data);
 
             // Retourner le chemin relatif (URL)
-            return 'storage/profiles/' . $fileName;
+            return 'profiles/' . $fileName;
 
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la sauvegarde de l\'image base64: ' . $e->getMessage());
@@ -681,7 +681,7 @@ class MemberController extends Controller
             $file->move($destinationPath, $fileName);
 
             // Retourner le chemin relatif pour l'affichage (ex: storage/profiles/xxx.jpg)
-            return 'storage/profiles/' . $fileName;
+            return 'profiles/' . $fileName;
 
         } catch (\Exception $e) {
             \Log::error('Erreur lors de la sauvegarde du fichier: ' . $e->getMessage());
@@ -807,8 +807,8 @@ class MemberController extends Controller
             // Gérer l'image base64
             if ($request->has('face_base64') && !empty($request->face_base64)) {
                 // Supprimer l'ancienne image si elle existe
-                if ($member->face_path && file_exists(public_path($member->face_path))) {
-                    unlink(public_path($member->face_path));
+                if ($member->face_path && file_exists(public_path('storage/' . $member->face_path))) {
+                    unlink(public_path('storage/' . $member->face_path));
                 }
 
                 $data['face_path'] = $this->saveBase64Image($request->face_base64);
